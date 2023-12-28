@@ -1,8 +1,5 @@
 import os
 import numpy as np
-from sklearn.model_selection import KFold
-from sklearn.preprocessing import \
-    RobustScaler  # TODO possiamo anche provare con StandardScaler e MinMaxScaler e paragonare i risultati
 from sklearn.metrics import r2_score
 
 
