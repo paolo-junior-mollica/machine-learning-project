@@ -17,6 +17,7 @@ def mean_euclidean_error(y_true, y_pred):
 
 class NeuralNetwork:
     def __init__(self, input_dimension, output_dimension, architecture, activation, dropout_input_rate, dropout_hidden_rate, learning_rate, momentum, weight_decay, use_nesterov):
+        self.built_model = None
         self.input_dimension = input_dimension
         self.output_dimension = output_dimension
         self.architecture = architecture
@@ -60,11 +61,12 @@ class NeuralNetwork:
                         nesterov=self.use_nesterov, decay=self.weight_decay)
         model.compile(loss=mean_euclidean_error, optimizer=optimizer)
 
-        return model
+        self.built_model = model
+
+        return self.built_model
 
     def plot_architecture(self):
-        model = self.build_model()
-        keras.utils.plot_model(model, to_file='model_architecture.png', show_shapes=True)
+        keras.utils.plot_model(self.built_model, to_file='model_architecture.png', show_shapes=True)
         img = plt.imread('model_architecture.png')
         plt.imshow(img)
         plt.axis('off')
