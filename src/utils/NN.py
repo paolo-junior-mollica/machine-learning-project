@@ -21,25 +21,8 @@ from keras.initializers import he_normal
 
 mee_scorer = make_scorer(mean_euclidean_error, greater_is_better=False)
 
-NetworArchitecture = [100, 30, 30]
-activation = "relu"
-eta = 0.0005
-DropOutInput = 0
-DropOutHiddenLayer = 0
-epochs = 500
-momentum = 0.6
-nesterov = False
-batch_size = 128
-Not_yet_printed = True
 
-#######################################################
-# !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-# If use drop out we should use the 
-# 1) kernel_initializer='normal', kernel_constraint=maxnorm(3))
-# 2) Increase the learning rate and momentum
-# 3)the number units increased to n/(1-dropout)
-# as suggested on dropout paper
-######################################################
+
 
 
 
