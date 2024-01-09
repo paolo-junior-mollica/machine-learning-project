@@ -10,13 +10,9 @@ from keras.src.optimizers import SGD
 import keras.backend as kb
 
 
-def mean_euclidean_error(y_true, y_pred):
-    # Has to work with tensors
-    return kb.mean(kb.sqrt(kb.sum(kb.square(y_true - y_pred), axis=-1)))
-
-
 class NeuralNetwork:
-    def __init__(self, input_dimension, output_dimension, architecture, activation, dropout_input_rate, dropout_hidden_rate, learning_rate, momentum, weight_decay, use_nesterov):
+    def __init__(self, input_dimension, output_dimension, architecture, activation, dropout_input_rate,
+                 dropout_hidden_rate, learning_rate, momentum, weight_decay, use_nesterov):
         self.built_model = None
         self.input_dimension = input_dimension
         self.output_dimension = output_dimension
@@ -45,6 +41,11 @@ class NeuralNetwork:
         As for the optimizer, we use Stochastic Gradient Descent (SGD) since it's a regression problem.
         '''
 
+    @staticmethod
+    def mean_euclidean_error(y_true, y_pred):
+        # Has to work with tensors
+        return kb.mean(kb.sqrt(kb.sum(kb.square(y_true - y_pred), axis=-1)))
+
     def build_model(self):
         model = Sequential()
         model.add(Dense(units=self.input_dimension, activation=self.activation, input_dim=self.input_dimension))
@@ -59,7 +60,7 @@ class NeuralNetwork:
 
         optimizer = SGD(learning_rate=self.learning_rate, momentum=self.momentum,
                         nesterov=self.use_nesterov, decay=self.weight_decay)
-        model.compile(loss=mean_euclidean_error, optimizer=optimizer)
+        model.compile(loss=self.mean_euclidean_error, optimizer=optimizer)
 
         self.built_model = model
 
@@ -72,5 +73,4 @@ class NeuralNetwork:
         plt.axis('off')
         plt.show()
 
-
-#%%
+# %%
