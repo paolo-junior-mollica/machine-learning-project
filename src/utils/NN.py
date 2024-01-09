@@ -2,90 +2,73 @@
 from keras.models import Sequential
 from keras.layers import Dense
 from keras.layers import Dropout
-from keras.constraints import maxnorm
 import keras
-import numpy as np
-import pandas as pd
-import sklearn
-from sklearn.metrics import make_scorer
-from sklearn.model_selection import KFold
 import matplotlib.pyplot as plt
-import tensorflow as tf
-import time
-from sklearn.model_selection import StratifiedKFold
-from utils import save_plot, mean_euclidean_error, root_mean_squared_error, multidim_r2
-from keras.initializers import he_normal
+from keras.src.constraints import MaxNorm
+from keras.src.initializers.initializers import HeNormal
+from keras.src.optimizers import SGD
+import keras.backend as kb
 
 
+def mean_euclidean_error(y_true, y_pred):
+    # Has to work with tensors
+    return kb.mean(kb.sqrt(kb.sum(kb.square(y_true - y_pred), axis=-1)))
 
 
-mee_scorer = make_scorer(mean_euclidean_error, greater_is_better=False)
-
-
-
-
-
-
-
-import matplotlib.pyplot as plt
-
-class NN():
-    def __init__(self, architecture=None, activation= "relu", num_epochs=None, learning_rate=None, momentum=None, use_nesterov=None, batch_size=None, weight_decay=0, input_dimension=None, output_dimension=None, dropout_input_rate=None, dropout_hidden_rate=None):
-        self.NetworArchitecture = architecture
-        self.activation = activation
-        self.epochs = num_epochs
-        self.eta = learning_rate
-        self.momentum = momentum
-        self.nesterov = use_nesterov
-        self.batch_size = batch_size
-        self.decay = weight_decay
+class NeuralNetwork:
+    def __init__(self, input_dimension, output_dimension, architecture, activation, dropout_input_rate, dropout_hidden_rate, learning_rate, momentum, weight_decay, use_nesterov):
         self.input_dimension = input_dimension
         self.output_dimension = output_dimension
+        self.architecture = architecture
+        self.activation = activation
         self.dropout_input_rate = dropout_input_rate
         self.dropout_hidden_rate = dropout_hidden_rate
-        """
-        usiamo RELU come funzione di attivazione per i layer nascosti e linear per l'output layer
-        Relu ci permette di avere un apprendimento Non lineare
-        inoltre aiuta a mitigare il problema del vanishing gradient
-        grazie alla sua natura lineare nei valori positivi aiuta a migliorare la velocità di convergenza rispetto a tanh e sigmoid
-        !! nelle reti Relu possono accadere i cosi detti ' neuroni morti' ovvero neuroni che non si attivano mai, per questo motivo si usa la tecnica del dropout
-        in alternativa (TODO) si puo usare leaky relu
-        inoltre usiamo SGD come ottimizzatore, poiche é un problema di regressione
+        self.learning_rate = learning_rate
+        self.momentum = momentum
+        self.weight_decay = weight_decay
+        self.use_nesterov = use_nesterov
+
+        '''
+        We utilize the ReLU activation function for the hidden layers and a linear activation for the output layer. 
+        ReLU allows for non-linear learning, and it helps mitigate the vanishing gradient problem. Due to its linear 
+        nature for positive values, ReLU can also improve convergence speed compared to tanh and sigmoid functions. 
+        However, it's worth noting that 'dead neurons' can occur in networks using ReLU, where neurons never activate. 
+        To address this, dropout techniques are often employed. Alternatively, one might consider using leaky ReLU.
         
-        
-        Per l'inizializzazione dei pesi, usiamo la 'he normal', in alternativa si puo usare la 'glorot_uniform' che é la default per le reti con attivazione relu
-        he_normal in Keras è un metodo di inizializzazione del kernel (pesi) di un layer, sviluppato da He et al. 
-        in uno studio del 2015.
-        È specificamente progettato per layer con funzioni di attivazione ReLU (Rectified Linear Unit) e le sue varianti. L'idea di base è di adottare un'inizializzazione dei pesi 
-        che mantiene la varianza attraverso i layer in reti molto profonde, 
-        aiutando a mitigare il problema del gradiente sparito che spesso si verifica in tali reti.
-        """
-    def createModel(self):
-        model = Sequential()
-        model.add(Dense(units=self.input_dimension, activation=self.activation, input_dim=self.input_dimension))  # input_dim = 10, nei layer successivi non vi é bisogno di specificare l'input_dim, 
-                                                                                                                        #poiche keras inferisce da solo l'input_dim, che a sua volta sará la dimensione dell'output del layer precedente 
-        model.add(Dropout(self.dropout_input_rate))
-        model.add(Dense(kernel_initializer= he_normal(), kernel_constraint=maxnorm(3),
-                                units=NetworArchitecture[0], activation=self.activation))
-        model.add(Dropout(self.dropout_hidden_rate[1]))     
-        model.add(Dense(units=self.NetworArchitecture[2], activation=self.activation))
-        model.add(Dropout(self.dropout_hidden_rate[1]))  # Use the second element of dropout_hidden_rate
-        model.add(Dense(units=3, activation="linear")) # output layer, activation = linear, poiche é un problema di regressione
-        model.compile(loss=mee_scorer,
-                      optimizer=keras.optimizers.SGD(lr=self.eta, momentum=self.momentum, nesterov=self.nesterov, decay=self.decay))
-        return model
+        For the weight initialization, we opt for 'He normal' over the 'Glorot uniform,' which is the default for 
+        networks with ReLU activation. The 'He normal' initializer in Keras, developed by He et al. in a 2015 study, 
+        is tailored for layers with ReLU activations and its variants. The core principle is to adopt a weight 
+        initialization strategy that maintains variance across layers in deep networks, thereby alleviating the 
+        vanishing gradient problem often encountered in such architectures.
     
-    def plotArchitecture(self):
-        model = self.createModel()
+        As for the optimizer, we use Stochastic Gradient Descent (SGD) since it's a regression problem.
+        '''
+
+    def build_model(self):
+        model = Sequential()
+        model.add(Dense(units=self.input_dimension, activation=self.activation, input_dim=self.input_dimension))
+        model.add(Dropout(self.dropout_input_rate))
+
+        for units, dropout_rate in zip(self.architecture, self.dropout_hidden_rate):
+            model.add(Dense(units=units, activation=self.activation,
+                            kernel_initializer=HeNormal(), kernel_constraint=MaxNorm(3)))
+            model.add(Dropout(dropout_rate))
+
+        model.add(Dense(units=self.output_dimension, activation='linear'))  # Linear activation for regression output
+
+        optimizer = SGD(learning_rate=self.learning_rate, momentum=self.momentum,
+                        nesterov=self.use_nesterov, decay=self.weight_decay)
+        model.compile(loss=mean_euclidean_error, optimizer=optimizer)
+
+        return model
+
+    def plot_architecture(self):
+        model = self.build_model()
         keras.utils.plot_model(model, to_file='model_architecture.png', show_shapes=True)
         img = plt.imread('model_architecture.png')
         plt.imshow(img)
         plt.axis('off')
         plt.show()
 
-    
 
-
-
-
-
+#%%
