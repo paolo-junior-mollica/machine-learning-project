@@ -48,9 +48,10 @@ class NeuralNetwork:
 
     def build_model(self):
         model = Sequential()
-        model.add(Dense(units=self.input_dimension, activation=self.activation, input_dim=self.input_dimension))
+        model.add(Dense(units=self.architecture[0], activation=self.activation, input_dim=self.input_dimension))
         model.add(Dropout(self.dropout_input_rate))
 
+        self.architecture = self.architecture[1:]  # Remove first element from list
         for units, dropout_rate in zip(self.architecture, self.dropout_hidden_rate):
             model.add(Dense(units=units, activation=self.activation,
                             kernel_initializer=HeNormal(), kernel_constraint=MaxNorm(3)))
