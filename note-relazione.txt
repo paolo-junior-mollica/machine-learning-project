@@ -2,7 +2,10 @@ Su Monk Task 2 in generale:
 
 - Il dataset era discretamente sbilanciato, per cui è importante notare che la misura di accuracy
 non è totalmente veritiera. Per questo abbiamo utilizzato anche la balanced accuracy, che tiene conto
-delle diverse proporzioni tra le classi
+delle diverse proporzioni tra le classi.
+
+    Esempio: 99% dei dati appartengono a classe A, l'1% appartiene alla classe B. Un modello che assegna
+    tutti i dati sempre e solo ad A ottiene una accuracy del 99%, quando quella reale è del 50%.
 
 - Un dataset sbilanciato può anche influire negativamente sul training di un modello perché può portare
 il modello a sviluppare un bias verso la majority class, rendendo difficile l'apprendimento e la
