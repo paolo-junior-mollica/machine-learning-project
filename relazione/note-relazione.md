@@ -74,6 +74,7 @@ detta "pruning", interrompendo precocemente i trial meno promettenti.
       (Andrea) Vicino all'output della cella, in un angolino in alto a sx, ci sono tre pallini e compare l'opzione "clear cell output". Almeno, su VSCode è così, ma credo ci sia una cosa analoga anche su browser. Quando si esegue la cella sotto compare l'output, con pulire le celle del notebook intendo "cancellare" questi output
       (Paolo) Non penso sia una buona idea pulire gli output perché ci sono tutti i risultati delle metriche, fossi nel prof vorrei vedere che nel report non mi dici cazzate. Direi di preoccuparcene quando e se effettivamente avremo problemi di dimensioni dello zip
       (Andrea) Quello che dici ha molto senso, ho scritto quel commento perché ho trovato scritta questa cosa nelle istruzioni del professore. Comunque, i risultati delle metriche, almeno quelli più importanti, vanno messi nel report (quelli non strettamente necessari/non richiesti possono essere messi in appendice). Idem i plots. Ad ogni modo, certo, possiamo preoccuparcene se e quando avremo problemi di spazio.
+      (Paolo) Vai rimaniamo così. Se con le dimensioni ci siamo non cancelliamo gli output, altrimenti sì. Però evitiamo di committare i notebook senza output, così a noi restano. Lo fa uno di noi in locale giusto per creare lo zip e basta.
 
 ### Cosa consegnare (Andrea)
 
