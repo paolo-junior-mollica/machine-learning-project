@@ -46,7 +46,7 @@ accenno
 
 ---
 
-## NN per cup2023
+## NN per cup2023 (Paolo)
 
 - Ci sono due notebook: in uno è stata fatta una grid search con CV=5, nell'altro è stato utilizzato Optuna.
 - Optuna è una libreria avanzata per l'ottimizzazione automatica degli iperparametri, che utilizza 
