@@ -59,7 +59,12 @@ accenno
 
 ### Osservazioni:
 - Se riscaliamo/normalizziamo i valori target per la CUP, bisogna ricordarsi di riportare i risultati (ovvero il MEE ottenuto sui test) nella scala originale, sia sulle slides, sia nel file con i risultati finali
+
+      (Paolo) I valori target non vengono mai scalati, vengono scalate solo le feature, quindi non ci sono problemi 
+
 - Pulire le celle nel notebook fa risparmiare spazio. Questo è importante perché il pacchetto da consegnare deve avere dimensione massima 20MB, tentando di mantenersi sui 5MB
+      
+      (Paolo) Pulire in che senso?
 
 ### Cosa consegnare:
 
