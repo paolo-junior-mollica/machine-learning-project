@@ -1,4 +1,4 @@
-## Su Monk Task 2 in generale (Paolo)
+## Monk Task 2 in generale (Paolo)
 
 - Il dataset era discretamente sbilanciato, per cui è importante notare che la misura di accuracy
 non è totalmente veritiera. Per questo abbiamo utilizzato anche la balanced accuracy, che tiene conto
@@ -13,7 +13,7 @@ corretta classificazione della minority class.
 
 ---  
 
-## Su SVM per Monk Task 2 (Paolo)
+## SVM per Monk Task 2 (Paolo)
 - SVM per il Task 2 per fortuna da un 100% di accuracy, per cui il modello funziona bene. Nel caso un cui
 avessimo avuto una accuracy più bassa, avremmo potuto provare tecniche di undersampling od oversampling,
 rispettivamente Condensed Nearest Neighbor (CNN) e SMOTE.
@@ -38,7 +38,7 @@ accenno
 
 ---
 
-## Su Random Forest e NN per Monk Task 2 (Paolo)
+## Random Forest e NN per Monk Task 2 (Paolo)
 
 - Il Random Forest è ritenuto abbastanza robusto nei confronti dei dataset sbilanciati
 
@@ -46,9 +46,16 @@ accenno
 
 ---
 
+## NN per cup2023
 
+- Ci sono due notebook: in uno è stata fatta una grid search con CV=5, nell'altro è stato utilizzato Optuna.
+- Optuna è una libreria avanzata per l'ottimizzazione automatica degli iperparametri, che utilizza 
+l'ottimizzazione bayesiana. Consente di trovare efficientemente la migliore configurazione di 
+iperparametri equilibrando tra l'esplorazione di nuove combinazioni e l'approfondimento di quelle promettenti. 
+Inoltre, migliora l'efficienza della ricerca con una tecnica detta "pruning", interrompendo precocemente 
+i trial meno promettenti.
 
-
+---
 
 
 
