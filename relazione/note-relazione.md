@@ -49,11 +49,10 @@ accenno
 ## NN per cup2023 (Paolo)
 
 - Ci sono due notebook: in uno è stata fatta una grid search con CV=5, nell'altro è stato utilizzato Optuna.
-- Optuna è una libreria avanzata per l'ottimizzazione automatica degli iperparametri, che utilizza 
-l'ottimizzazione bayesiana. Consente di trovare efficientemente la migliore configurazione di 
-iperparametri equilibrando tra l'esplorazione di nuove combinazioni e l'approfondimento di quelle promettenti. 
-Inoltre, migliora l'efficienza della ricerca con una tecnica detta "pruning", interrompendo precocemente 
-i trial meno promettenti.
+- Optuna è una libreria per il tuning degli iperparametri, che utilizza l'ottimizzazione bayesiana. 
+Consente di trovare la migliore configurazione di iperparametri equilibrando tra l'esplorazione di nuove 
+combinazioni e l'approfondimento di quelle promettenti. Inoltre, migliora l'efficienza della ricerca con una tecnica 
+detta "pruning", interrompendo precocemente i trial meno promettenti.
 
 ---
 
