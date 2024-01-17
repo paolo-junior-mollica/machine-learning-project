@@ -65,11 +65,13 @@ detta "pruning", interrompendo precocemente i trial meno promettenti.
 
       (Paolo) I valori target non vengono mai scalati, vengono scalate solo le feature, quindi non ci sono problemi 
       (Andrea) Ah ok, quindi le predizioni del modello hanno la stessa scala, per così dire, dei valori originali
+      (Paolo) Esatto, facciamo training su feature scalate ma prediciamo nella scala originale
 
 - Pulire le celle nel notebook fa risparmiare spazio. Questo è importante perché il pacchetto da consegnare deve avere dimensione massima 20MB, tentando di mantenersi sui 5MB
       
       (Paolo) Pulire in che senso?
       (Andrea) Vicino all'output della cella, in un angolino in alto a sx, ci sono tre pallini e compare l'opzione "clear cell output". Almeno, su VSCode è così, ma credo ci sia una cosa analoga anche su browser. Quando si esegue la cella sotto compare l'output, con pulire le celle del notebook intendo "cancellare" questi output
+      (Paolo) Non penso sia una buona idea pulire gli output perché ci sono tutti i risultati delle metriche, fossi nel prof vorrei vedere che nel report non mi dici cazzate
 
 ### Cosa consegnare (Andrea)
 
