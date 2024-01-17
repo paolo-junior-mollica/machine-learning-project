@@ -1,4 +1,4 @@
-## Su Monk Task 2 in generale:
+## Su Monk Task 2 in generale (Paolo)
 
 - Il dataset era discretamente sbilanciato, per cui è importante notare che la misura di accuracy
 non è totalmente veritiera. Per questo abbiamo utilizzato anche la balanced accuracy, che tiene conto
@@ -11,10 +11,9 @@ delle diverse proporzioni tra le classi.
 il modello a sviluppare un bias verso la majority class, rendendo difficile l'apprendimento e la
 corretta classificazione della minority class.
 
+---  
 
----
-
-## Su SVM per Monk Task 2:
+## Su SVM per Monk Task 2 (Paolo)
 - SVM per il Task 2 per fortuna da un 100% di accuracy, per cui il modello funziona bene. Nel caso un cui
 avessimo avuto una accuracy più bassa, avremmo potuto provare tecniche di undersampling od oversampling,
 rispettivamente Condensed Nearest Neighbor (CNN) e SMOTE.
@@ -39,14 +38,12 @@ accenno
 
 ---
 
-## Su Random Forest e NN per Monk Task 2
+## Su Random Forest e NN per Monk Task 2 (Paolo)
 
 - Il Random Forest è ritenuto abbastanza robusto nei confronti dei dataset sbilanciati
 
 - In generale comunque, sia Random Forest che NN possono essere provati con tecniche di undersampling/oversampling.
 
-
----
 ---
 
 
@@ -66,7 +63,7 @@ accenno
       
       (Paolo) Pulire in che senso?
 
-### Cosa consegnare:
+### Cosa consegnare (Andrea)
 
 Faccio un'estrema sintesi delle indicazioni fornite dal professore (su Moodle c'è un pacchetto con tutto) per quanto riguarda la consegna:
 
