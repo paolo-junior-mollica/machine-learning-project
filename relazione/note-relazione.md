@@ -53,7 +53,7 @@ accenno
 Consente di trovare la migliore configurazione di iperparametri equilibrando tra l'esplorazione di nuove 
 combinazioni e l'approfondimento di quelle promettenti. Inoltre, migliora l'efficienza della ricerca con una tecnica 
 detta "pruning", interrompendo precocemente i trial meno promettenti.
-
+- (Andrea) Questo è molto interessante, però il Micheli una full grid search la vuole vedere. Può essere nidificata, ma un'esplorazione completa la vuole.
 ---
 
 
@@ -64,10 +64,12 @@ detta "pruning", interrompendo precocemente i trial meno promettenti.
 - Se riscaliamo/normalizziamo i valori target per la CUP, bisogna ricordarsi di riportare i risultati (ovvero il MEE ottenuto sui test) nella scala originale, sia sulle slides, sia nel file con i risultati finali
 
       (Paolo) I valori target non vengono mai scalati, vengono scalate solo le feature, quindi non ci sono problemi 
+      (Andrea) Ah ok, quindi le predizioni del modello hanno la stessa scala, per così dire, dei valori originali
 
 - Pulire le celle nel notebook fa risparmiare spazio. Questo è importante perché il pacchetto da consegnare deve avere dimensione massima 20MB, tentando di mantenersi sui 5MB
       
       (Paolo) Pulire in che senso?
+      (Andrea) Vicino all'output della cella, in un angolino in alto a sx, ci sono tre pallini e compare l'opzione "clear cell output". Almeno, su VSCode è così, ma credo ci sia una cosa analoga anche su browser. Quando si esegue la cella sotto compare l'output, con pulire le celle del notebook intendo "cancellare" questi output
 
 ### Cosa consegnare (Andrea)
 
