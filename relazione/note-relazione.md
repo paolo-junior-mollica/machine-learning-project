@@ -65,7 +65,7 @@ detta "pruning", interrompendo precocemente i trial meno promettenti.
 
       (Paolo) I valori target non vengono mai scalati, vengono scalate solo le feature, quindi non ci sono problemi 
       (Andrea) Ah ok, quindi le predizioni del modello hanno la stessa scala, per così dire, dei valori originali
-      (Paolo) Esatto, facciamo training su feature scalate ma prediciamo nella scala originale
+      (Paolo) Esatto, feature scalate e output nella scala originale
 
 - Pulire le celle nel notebook fa risparmiare spazio. Questo è importante perché il pacchetto da consegnare deve avere dimensione massima 20MB, tentando di mantenersi sui 5MB
       
