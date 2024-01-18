@@ -4,15 +4,19 @@ from keras.layers import Dense
 from keras.layers import Dropout
 import keras
 import matplotlib.pyplot as plt
+from keras.src.callbacks import EarlyStopping
 from keras.src.constraints import MaxNorm
 from keras.src.initializers.initializers import HeNormal
 from keras.src.optimizers import SGD
 import keras.backend as kb
+from sklearn.base import BaseEstimator, RegressorMixin
+from sklearn.metrics import mean_squared_error
 
 
-class NeuralNetwork:
-    def __init__(self, input_dimension, output_dimension, architecture, activation, dropout_input_rate,
-                 dropout_hidden_rate, learning_rate, momentum, weight_decay, use_nesterov):
+class NeuralNetwork(BaseEstimator, RegressorMixin):
+    def __init__(self, input_dimension=10, output_dimension=3, architecture=(64, 64), activation='relu',
+                 loss='mean_squared_error', dropout_input_rate=.2, dropout_hidden_rate=(.2, .2), learning_rate=.1, momentum=0, weight_decay=1e-3,
+                 use_nesterov=False, epochs=100, batch_size=32, patience=10):
         self.built_model = None
         self.input_dimension = input_dimension
         self.output_dimension = output_dimension
@@ -24,6 +28,10 @@ class NeuralNetwork:
         self.momentum = momentum
         self.weight_decay = weight_decay
         self.use_nesterov = use_nesterov
+        self.loss = loss if loss == 'mean_squared_error' else self.mean_euclidean_error
+        self.epochs = epochs
+        self.batch_size = batch_size
+        self.patience = patience
 
         '''
         We utilize the ReLU activation function for the hidden layers and a linear activation for the output layer. 
@@ -51,8 +59,7 @@ class NeuralNetwork:
         model.add(Dense(units=self.architecture[0], activation=self.activation, input_dim=self.input_dimension))
         model.add(Dropout(self.dropout_input_rate))
 
-        self.architecture = self.architecture[1:]  # Remove first element from list
-        for units, dropout_rate in zip(self.architecture, self.dropout_hidden_rate):
+        for units, dropout_rate in zip(self.architecture[1:], self.dropout_hidden_rate):
             model.add(Dense(units=units, activation=self.activation,
                             kernel_initializer=HeNormal(), kernel_constraint=MaxNorm(3)))
             model.add(Dropout(dropout_rate))
@@ -61,7 +68,7 @@ class NeuralNetwork:
 
         optimizer = SGD(learning_rate=self.learning_rate, momentum=self.momentum,
                         nesterov=self.use_nesterov, decay=self.weight_decay)
-        model.compile(loss=self.mean_euclidean_error, optimizer=optimizer)
+        model.compile(loss=self.loss, optimizer=optimizer)
 
         self.built_model = model
 
@@ -73,5 +80,18 @@ class NeuralNetwork:
         plt.imshow(img)
         plt.axis('off')
         plt.show()
+
+    def fit(self, X, y):
+        self.build_model()
+        callbacks = [EarlyStopping(monitor='loss', patience=self.patience)]
+        self.built_model.fit(X, y, epochs=self.epochs, batch_size=self.batch_size, callbacks=callbacks)
+        return self
+
+    def predict(self, X):
+        return self.built_model.predict(X)
+
+    def score(self, X, y, sample_weight=None):
+        y_pred = self.predict(X)
+        return -mean_squared_error(y, y_pred, sample_weight=sample_weight)
 
 # %%
