@@ -10,7 +10,22 @@ from keras.src.initializers.initializers import HeNormal
 from keras.src.optimizers import SGD
 import keras.backend as kb
 from sklearn.base import BaseEstimator, RegressorMixin
-from sklearn.metrics import mean_squared_error
+
+'''
+We utilize the ReLU activation function for the hidden layers and a linear activation for the output layer. 
+ReLU allows for non-linear learning, and it helps mitigate the vanishing gradient problem. Due to its linear 
+nature for positive values, ReLU can also improve convergence speed compared to tanh and sigmoid functions. 
+However, it's worth noting that 'dead neurons' can occur in networks using ReLU, where neurons never activate. 
+To address this, dropout techniques are often employed. Alternatively, one might consider using leaky ReLU.
+
+For the weight initialization, we opt for 'He normal' over the 'Glorot uniform,' which is the default for 
+networks with ReLU activation. The 'He normal' initializer in Keras, developed by He et al. in a 2015 study, 
+is tailored for layers with ReLU activations and its variants. The core principle is to adopt a weight 
+initialization strategy that maintains variance across layers in deep networks, thereby alleviating the 
+vanishing gradient problem often encountered in such architectures.
+
+As for the optimizer, we use Stochastic Gradient Descent (SGD) since it's a regression problem.
+'''
 
 
 class NeuralNetwork(BaseEstimator, RegressorMixin):
@@ -34,22 +49,6 @@ class NeuralNetwork(BaseEstimator, RegressorMixin):
         self.epochs = epochs
         self.batch_size = batch_size
         self.patience = patience
-
-        '''
-        We utilize the ReLU activation function for the hidden layers and a linear activation for the output layer. 
-        ReLU allows for non-linear learning, and it helps mitigate the vanishing gradient problem. Due to its linear 
-        nature for positive values, ReLU can also improve convergence speed compared to tanh and sigmoid functions. 
-        However, it's worth noting that 'dead neurons' can occur in networks using ReLU, where neurons never activate. 
-        To address this, dropout techniques are often employed. Alternatively, one might consider using leaky ReLU.
-        
-        For the weight initialization, we opt for 'He normal' over the 'Glorot uniform,' which is the default for 
-        networks with ReLU activation. The 'He normal' initializer in Keras, developed by He et al. in a 2015 study, 
-        is tailored for layers with ReLU activations and its variants. The core principle is to adopt a weight 
-        initialization strategy that maintains variance across layers in deep networks, thereby alleviating the 
-        vanishing gradient problem often encountered in such architectures.
-    
-        As for the optimizer, we use Stochastic Gradient Descent (SGD) since it's a regression problem.
-        '''
 
     @staticmethod
     def mean_euclidean_error(y_true, y_pred):
@@ -95,7 +94,7 @@ class NeuralNetwork(BaseEstimator, RegressorMixin):
 
     def score(self, X, y, sample_weight=None):
         y_pred = self.predict(X)
-        # In scikit-learn, higher scores indicate better models by convention
+        # In sklearn, higher scores indicate better models by convention
         return -self.mean_euclidean_error(y, y_pred)
 
     def history(self):
