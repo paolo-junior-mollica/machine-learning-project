@@ -96,7 +96,7 @@ class NeuralNetwork(BaseEstimator, RegressorMixin):
     def score(self, X, y, sample_weight=None):
         y_pred = self.predict(X)
         # In scikit-learn, higher scores indicate better models by convention
-        return -mean_squared_error(y, y_pred, sample_weight=sample_weight)
+        return -self.mean_euclidean_error(y, y_pred)
 
     def history(self):
         return self.history.history
