@@ -15,8 +15,10 @@ from sklearn.metrics import mean_squared_error
 
 class NeuralNetwork(BaseEstimator, RegressorMixin):
     def __init__(self, input_dimension=10, output_dimension=3, architecture=(64, 64), activation='relu',
-                 loss='mean_squared_error', dropout_input_rate=.2, dropout_hidden_rate=(.2, .2), learning_rate=.1, momentum=0, weight_decay=1e-3,
+                 loss='mean_squared_error', dropout_input_rate=.2, dropout_hidden_rate=(.2, .2), learning_rate=.1,
+                 momentum=0, weight_decay=1e-3,
                  use_nesterov=False, epochs=100, batch_size=32, patience=10):
+        self.history = None
         self.built_model = None
         self.input_dimension = input_dimension
         self.output_dimension = output_dimension
@@ -85,7 +87,7 @@ class NeuralNetwork(BaseEstimator, RegressorMixin):
     def fit(self, X, y):
         self.build_model()
         callbacks = [EarlyStopping(monitor='loss', patience=self.patience)]
-        self.built_model.fit(X, y, epochs=self.epochs, batch_size=self.batch_size, callbacks=callbacks)
+        self.history = self.built_model.fit(X, y, epochs=self.epochs, batch_size=self.batch_size, callbacks=callbacks)
         return self
 
     def predict(self, X):
@@ -96,4 +98,6 @@ class NeuralNetwork(BaseEstimator, RegressorMixin):
         # In scikit-learn, higher scores indicate better models by convention
         return -mean_squared_error(y, y_pred, sample_weight=sample_weight)
 
+    def history(self):
+        return self.history.history
 # %%
