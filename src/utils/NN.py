@@ -22,13 +22,13 @@ class NeuralNetwork(BaseEstimator, RegressorMixin):
         self.output_dimension = output_dimension
         self.architecture = architecture
         self.activation = activation
+        self.loss = loss if loss == 'mean_squared_error' else self.mean_euclidean_error
         self.dropout_input_rate = dropout_input_rate
         self.dropout_hidden_rate = dropout_hidden_rate
         self.learning_rate = learning_rate
         self.momentum = momentum
         self.weight_decay = weight_decay
         self.use_nesterov = use_nesterov
-        self.loss = loss if loss == 'mean_squared_error' else self.mean_euclidean_error
         self.epochs = epochs
         self.batch_size = batch_size
         self.patience = patience
@@ -64,7 +64,8 @@ class NeuralNetwork(BaseEstimator, RegressorMixin):
                             kernel_initializer=HeNormal(), kernel_constraint=MaxNorm(3)))
             model.add(Dropout(dropout_rate))
 
-        model.add(Dense(units=self.output_dimension, activation='linear'))  # Linear activation for regression output
+        # Linear activation for regression output
+        model.add(Dense(units=self.output_dimension, activation='linear'))
 
         optimizer = SGD(learning_rate=self.learning_rate, momentum=self.momentum,
                         nesterov=self.use_nesterov, decay=self.weight_decay)
