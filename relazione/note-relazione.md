@@ -53,7 +53,9 @@ accenno
 Consente di trovare la migliore configurazione di iperparametri equilibrando tra l'esplorazione di nuove 
 combinazioni e l'approfondimento di quelle promettenti. Inoltre, migliora l'efficienza della ricerca con una tecnica 
 detta "pruning", interrompendo precocemente i trial meno promettenti.
-- (Andrea) Questo è molto interessante, però il Micheli una full grid search la vuole vedere. Può essere nidificata, ma un'esplorazione completa la vuole.
+
+      (Andrea) Questo è molto interessante, però il Micheli una full grid search la vuole vedere. Può essere nidificata, ma un'esplorazione completa la vuole.
+      (Paolo) Ci sono due notebook: in uno è stata fatta una grid search con CV=5, nell'altro è stato utilizzato Optuna.
 ---
 
 
