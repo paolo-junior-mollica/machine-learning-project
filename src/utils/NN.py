@@ -86,7 +86,8 @@ class NeuralNetwork(BaseEstimator, RegressorMixin):
     def fit(self, X, y):
         self.build_model()
         callbacks = [EarlyStopping(monitor='loss', patience=self.patience)]
-        self.history = self.built_model.fit(X, y, epochs=self.epochs, batch_size=self.batch_size, callbacks=callbacks)
+        self.history = self.built_model.fit(X, y, epochs=self.epochs, batch_size=self.batch_size,
+                                            callbacks=callbacks, verbose=0)
         return self
 
     def predict(self, X):
