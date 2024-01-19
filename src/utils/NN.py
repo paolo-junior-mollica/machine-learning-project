@@ -12,6 +12,7 @@ import keras.backend as kb
 from keras.src.regularizers import l2
 from sklearn.base import BaseEstimator, RegressorMixin, ClassifierMixin
 from sklearn.metrics import accuracy_score
+from tqdm.keras import TqdmCallback
 
 '''
 We utilize the ReLU activation function for the hidden layers and a linear activation for the output layer. 
@@ -89,7 +90,7 @@ class NeuralNetwork(BaseEstimator, RegressorMixin):
 
     def fit(self, X, y):
         self.build_model()
-        callbacks = [EarlyStopping(monitor='loss', patience=self.patience)]
+        callbacks = [EarlyStopping(monitor='loss', patience=self.patience), TqdmCallback(verbose=1)]
         self.history = self.built_model.fit(
             X, y, epochs=self.epochs, batch_size=self.batch_size, callbacks=callbacks, verbose=self.verbose
         )
@@ -150,12 +151,18 @@ class MonkNeuralNetwork(BaseEstimator, ClassifierMixin):
 
         return model
 
-    def fit(self, X, y):
+    def fit(self, X, y, validation_data=None):
         self.build_model()
         callbacks = [EarlyStopping(monitor='loss', patience=self.patience)]
-        self.history = self.built_model.fit(
-            X, y, epochs=self.epochs, batch_size=self.batch_size, callbacks=callbacks, verbose=self.verbose
-        )
+        if validation_data is not None:
+            self.history = self.built_model.fit(
+                X, y, epochs=self.epochs, batch_size=self.batch_size, callbacks=callbacks, verbose=self.verbose,
+                validation_data=validation_data
+            )
+        else:
+            self.history = self.built_model.fit(
+                X, y, epochs=self.epochs, batch_size=self.batch_size, callbacks=callbacks, verbose=self.verbose
+            )
         return self
 
     def predict(self, X):
