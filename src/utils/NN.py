@@ -7,9 +7,11 @@ import matplotlib.pyplot as plt
 from keras.src.callbacks import EarlyStopping
 from keras.src.constraints import MaxNorm
 from keras.src.initializers.initializers import HeNormal
-from keras.src.optimizers import SGD
+from keras.src.optimizers import SGD, Adam
 import keras.backend as kb
-from sklearn.base import BaseEstimator, RegressorMixin
+from keras.src.regularizers import l2
+from sklearn.base import BaseEstimator, RegressorMixin, ClassifierMixin
+from sklearn.metrics import accuracy_score
 
 '''
 We utilize the ReLU activation function for the hidden layers and a linear activation for the output layer. 
@@ -31,8 +33,7 @@ As for the optimizer, we use Stochastic Gradient Descent (SGD) since it's a regr
 class NeuralNetwork(BaseEstimator, RegressorMixin):
     def __init__(self, input_dimension=10, output_dimension=3, architecture=(64, 64), activation='relu',
                  loss='mean_squared_error', dropout_input_rate=.2, dropout_hidden_rate=(.2, .2), learning_rate=.1,
-                 momentum=0, weight_decay=1e-3,
-                 use_nesterov=False, epochs=100, batch_size=32, patience=10):
+                 momentum=0, weight_decay=1e-3, use_nesterov=False, epochs=100, batch_size=32, patience=10):
         self.history = None
         self.built_model = None
         self.input_dimension = input_dimension
@@ -100,4 +101,64 @@ class NeuralNetwork(BaseEstimator, RegressorMixin):
 
     def history(self):
         return self.history.history
+
+
 # %%
+
+
+class MonkNeuralNetwork(BaseEstimator, ClassifierMixin):
+    def __init__(self, architecture=(8,), activation='relu', optimizer='adam', learning_rate=0.001, lambda_value=0.1,
+                 momentum=0.9, input_dim=17, epochs=200, batch_size=16):
+
+        self.history = None
+        self.built_model = None
+        self.architecture = architecture
+        self.activation = activation
+        self.optimizer = optimizer
+        self.learning_rate = learning_rate
+        self.lambda_value = lambda_value
+        self.momentum = momentum
+        self.input_dim = input_dim
+        self.epochs = epochs
+        self.batch_size = batch_size
+
+    def build_model(self):
+        model = Sequential()
+        model.add(Dense(units=self.architecture[0], input_dim=self.input_dim, activation=self.activation,
+                        kernel_regularizer=l2(self.lambda_value)))
+
+        for units in self.architecture[1:]:
+            model.add(Dense(units=units, activation=self.activation,
+                            kernel_regularizer=l2(self.lambda_value)))
+
+        model.add(Dense(1, activation='sigmoid'))
+
+        if self.optimizer == 'adam':
+            opt = Adam(learning_rate=self.learning_rate, beta_1=self.momentum)
+        else:
+            opt = SGD(learning_rate=self.learning_rate, momentum=self.momentum)
+
+        model.compile(loss='mean_squared_error', optimizer=opt, metrics=['binary_accuracy'])
+
+        self.built_model = model
+
+        return model
+
+    def fit(self, X, y):
+        self.build_model()
+        self.history = self.built_model.fit(X, y, epochs=self.epochs, batch_size=self.batch_size)
+        return self
+
+    def predict(self, X):
+        predictions = self.built_model.predict(X)
+        return (predictions > 0.5).astype('int32')
+
+    def score(self, X, y, sample_weight=None):
+        predictions = self.predict(X)
+        return accuracy_score(y, predictions, sample_weight=sample_weight)
+
+    def predict_proba(self, X):  # Optional
+        return self.built_model.predict(X)
+
+    def history(self):
+        return self.history.history
