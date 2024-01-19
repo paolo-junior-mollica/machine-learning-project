@@ -33,7 +33,9 @@ As for the optimizer, we use Stochastic Gradient Descent (SGD) since it's a regr
 class NeuralNetwork(BaseEstimator, RegressorMixin):
     def __init__(self, input_dimension=10, output_dimension=3, architecture=(64, 64), activation='relu',
                  loss='mean_squared_error', dropout_input_rate=.2, dropout_hidden_rate=(.2, .2), learning_rate=.1,
-                 momentum=0, weight_decay=1e-3, use_nesterov=False, epochs=100, batch_size=32, patience=10):
+                 momentum=0, weight_decay=1e-3, use_nesterov=False, epochs=100, batch_size=32, patience=10,
+                 verbose=1):
+
         self.history = None
         self.built_model = None
         self.input_dimension = input_dimension
@@ -50,6 +52,7 @@ class NeuralNetwork(BaseEstimator, RegressorMixin):
         self.epochs = epochs
         self.batch_size = batch_size
         self.patience = patience
+        self.verbose = verbose
 
     @staticmethod
     def mean_euclidean_error(y_true, y_pred):
@@ -87,8 +90,9 @@ class NeuralNetwork(BaseEstimator, RegressorMixin):
     def fit(self, X, y):
         self.build_model()
         callbacks = [EarlyStopping(monitor='loss', patience=self.patience)]
-        self.history = self.built_model.fit(X, y, epochs=self.epochs, batch_size=self.batch_size,
-                                            callbacks=callbacks, verbose=0)
+        self.history = self.built_model.fit(
+            X, y, epochs=self.epochs, batch_size=self.batch_size, callbacks=callbacks, verbose=self.verbose
+        )
         return self
 
     def predict(self, X):
@@ -108,7 +112,7 @@ class NeuralNetwork(BaseEstimator, RegressorMixin):
 
 class MonkNeuralNetwork(BaseEstimator, ClassifierMixin):
     def __init__(self, architecture=(8,), activation='relu', optimizer='adam', learning_rate=0.001, lambda_value=0.1,
-                 momentum=0.9, input_dim=17, epochs=200, batch_size=16, verbose=1):
+                 momentum=0.9, input_dim=17, epochs=200, batch_size=16, patience=10, verbose=1):
 
         self.history = None
         self.built_model = None
@@ -122,6 +126,7 @@ class MonkNeuralNetwork(BaseEstimator, ClassifierMixin):
         self.epochs = epochs
         self.batch_size = batch_size
         self.verbose = verbose
+        self.patience = patience
 
     def build_model(self):
         model = Sequential()
@@ -147,8 +152,9 @@ class MonkNeuralNetwork(BaseEstimator, ClassifierMixin):
 
     def fit(self, X, y):
         self.build_model()
+        callbacks = [EarlyStopping(monitor='loss', patience=self.patience)]
         self.history = self.built_model.fit(
-            X, y, epochs=self.epochs, batch_size=self.batch_size, verbose=self.verbose
+            X, y, epochs=self.epochs, batch_size=self.batch_size, callbacks=callbacks, verbose=self.verbose
         )
         return self
 
