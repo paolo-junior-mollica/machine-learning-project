@@ -108,7 +108,7 @@ class NeuralNetwork(BaseEstimator, RegressorMixin):
 
 class MonkNeuralNetwork(BaseEstimator, ClassifierMixin):
     def __init__(self, architecture=(8,), activation='relu', optimizer='adam', learning_rate=0.001, lambda_value=0.1,
-                 momentum=0.9, input_dim=17, epochs=200, batch_size=16):
+                 momentum=0.9, input_dim=17, epochs=200, batch_size=16, verbose=1):
 
         self.history = None
         self.built_model = None
@@ -121,6 +121,7 @@ class MonkNeuralNetwork(BaseEstimator, ClassifierMixin):
         self.input_dim = input_dim
         self.epochs = epochs
         self.batch_size = batch_size
+        self.verbose = verbose
 
     def build_model(self):
         model = Sequential()
@@ -146,7 +147,9 @@ class MonkNeuralNetwork(BaseEstimator, ClassifierMixin):
 
     def fit(self, X, y):
         self.build_model()
-        self.history = self.built_model.fit(X, y, epochs=self.epochs, batch_size=self.batch_size)
+        self.history = self.built_model.fit(
+            X, y, epochs=self.epochs, batch_size=self.batch_size, verbose=self.verbose
+        )
         return self
 
     def predict(self, X):
