@@ -58,7 +58,18 @@ detta "pruning", interrompendo precocemente i trial meno promettenti.
       (Paolo) Ci sono due notebook: in uno è stata fatta una grid search con CV=5, nell'altro è stato utilizzato Optuna.
 ---
 
+## Neural Network in generale (Paolo)
 
+- Per far sì che le due classi `NeuralNetwork` e `MonkNeuralNetwork` funzionino come modelli di
+sklearn, vanno estese le classi `BaseEstimator` e `RegressorMixin` o `ClassifierMixin`.
+- In termini di implementazione, vanno definiti i metodi `fit`, per addestrare il modello, `predict`, 
+per effettuare previsioni,  e `score`, per valutare le prestazioni del modello.
+- I metodi devono seguire le convenzioni di sklearn, come accettare input in forma di matrici X e vettori y, 
+e restituire lo stesso tipo di valori. 
+- In questo modo le due  classi possono essere utilizzate con GridSearch senza bisogno di wrapper come 
+`KerasRegressor`/`KerasClassifier`
+
+---
 
 ## Altre note "metodologiche" (Andrea)
 
