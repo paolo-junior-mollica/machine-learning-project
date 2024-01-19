@@ -88,12 +88,18 @@ class NeuralNetwork(BaseEstimator, RegressorMixin):
         plt.axis('off')
         plt.show()
 
-    def fit(self, X, y):
+    def fit(self, X, y, validation_data=None):
         self.build_model()
         callbacks = [EarlyStopping(monitor='loss', patience=self.patience), TqdmCallback(verbose=1)]
-        self.history = self.built_model.fit(
-            X, y, epochs=self.epochs, batch_size=self.batch_size, callbacks=callbacks, verbose=self.verbose
-        )
+        if validation_data is not None:
+            self.history = self.built_model.fit(
+                X, y, epochs=self.epochs, batch_size=self.batch_size, callbacks=callbacks, verbose=self.verbose,
+                validation_data=validation_data
+            )
+        else:
+            self.history = self.built_model.fit(
+                X, y, epochs=self.epochs, batch_size=self.batch_size, callbacks=callbacks, verbose=self.verbose
+            )
         return self
 
     def predict(self, X):
@@ -153,7 +159,7 @@ class MonkNeuralNetwork(BaseEstimator, ClassifierMixin):
 
     def fit(self, X, y, validation_data=None):
         self.build_model()
-        callbacks = [EarlyStopping(monitor='loss', patience=self.patience)]
+        callbacks = [EarlyStopping(monitor='loss', patience=self.patience), TqdmCallback(verbose=1)]
         if validation_data is not None:
             self.history = self.built_model.fit(
                 X, y, epochs=self.epochs, batch_size=self.batch_size, callbacks=callbacks, verbose=self.verbose,
