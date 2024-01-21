@@ -75,7 +75,7 @@ class NeuralNetwork(BaseEstimator, RegressorMixin):
 
         optimizer = SGD(learning_rate=self.learning_rate, momentum=self.momentum,
                         nesterov=self.use_nesterov, decay=self.weight_decay)
-        model.compile(loss=self.loss, optimizer=optimizer, metrics = ['mean_squared_error', 'mean_euclidean_error'])
+        model.compile(loss=self.loss, optimizer=optimizer)
 
         self.built_model = model
 
