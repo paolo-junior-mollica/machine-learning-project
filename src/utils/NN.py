@@ -90,7 +90,7 @@ class NeuralNetwork(BaseEstimator, RegressorMixin):
 
     def fit(self, X, y, validation_data=None):
         self.build_model()
-        callbacks = [EarlyStopping(monitor='loss', patience=self.patience), TqdmCallback(verbose=1)]
+        callbacks = [EarlyStopping(monitor='loss', patience=self.patience), TqdmCallback(verbose=0)]
         if validation_data is not None:
             self.history = self.built_model.fit(
                 X, y, epochs=self.epochs, batch_size=self.batch_size, callbacks=callbacks, verbose=self.verbose,
