@@ -4,6 +4,8 @@ from sklearn.metrics import r2_score
 import pickle
 import random
 import tensorflow as tf
+from joblib import load
+
 
 
 def save_plot(plot, folder, filename, format='png'):
@@ -68,6 +70,23 @@ def set_random_state(seed : int):
     random.seed(seed)
     np.random.seed(seed)
     tf.random.set_seed(seed)
+    
+def calculate_ensemble_prediction(y_test,X_test, model_folder, n_models=5, metric='MEE'):
+    
+    final_model_ = []
+    for i in range(n_models):
+        model_path = os.path.join(model_folder, f'NN_model_grid_NN_{metric}_model{i}.joblib')
+        final_model_[i] = load(model_path)
+    y_pred_ensemble_final = np.zeros_like(y_test)
+
+    for model in final_model_:
+        y_pred = model.predict(X_test)
+        y_pred_ensemble_final += y_pred
+
+    y_pred_ensemble_final /= len(final_model_)
+    return y_pred_ensemble_final
+
+
     
     
     
