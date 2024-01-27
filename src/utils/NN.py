@@ -35,7 +35,7 @@ class NeuralNetwork(BaseEstimator, RegressorMixin):
     def __init__(self, input_dimension=10, output_dimension=3, architecture=(64, 64), activation='relu',
                  loss='mean_squared_error', dropout_input_rate=.2, dropout_hidden_rate=(.2, .2), learning_rate=.1,
                  momentum=0, weight_decay=1e-3, use_nesterov=False, epochs=100, batch_size=32, patience=10,
-                 verbose=1, validation_data = None, early = True):
+                 verbose=1, validation_data = None, early = True, progress_bar = True):
 
         self.history = None
         self.built_model = None
@@ -56,6 +56,7 @@ class NeuralNetwork(BaseEstimator, RegressorMixin):
         self.verbose = verbose
         self.validation_data = validation_data
         self.early = early
+        self.progress_bar = progress_bar
 
     @staticmethod
     def mean_euclidean_error(y_true, y_pred):
@@ -93,10 +94,14 @@ class NeuralNetwork(BaseEstimator, RegressorMixin):
 
     def fit(self, X, y):
         self.build_model()
-        if self.early:
+        if self.early and self.progress_bar:
             callbacks = [EarlyStopping(monitor='val_loss', patience=self.patience), TqdmCallback(verbose=0)]
-        else:
+        elif self.early and not self.progress_bar:
+            callbacks = [EarlyStopping(monitor='val_loss', patience=self.patience)]
+        elif not self.early and self.progress_bar:
             callbacks = [TqdmCallback(verbose=0)]
+        else:
+            callbacks = []
         if self.validation_data is not None:
             self.history = self.built_model.fit(
                 X, y, epochs=self.epochs, batch_size=self.batch_size, callbacks=callbacks, verbose=self.verbose,
