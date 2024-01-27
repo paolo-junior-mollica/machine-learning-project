@@ -5,7 +5,7 @@ import pickle
 import random
 import tensorflow as tf
 from joblib import load
-
+import optuna
 
 
 def save_plot(plot, folder, filename, format='png'):
@@ -88,6 +88,33 @@ def calculate_ensemble_prediction(y_test,X_test, model_folder, n_models=5, metri
 
 
     
-    
-    
+def get_hyperparameter_values_from_study(study):
+    hyperparameters_values_list = []
+
+    # Assicurati che ci siano iperparametri da estrarre
+    if len(study.trials) > 0:
+        # Ottieni i nomi degli iperparametri dal primo trial completo
+        param_names = list(study.trials[0].params.keys())
+
+        # Itera attraverso tutti i trial completati dello study
+        for trial in study.trials:
+            if trial.state == optuna.trial.TrialState.COMPLETE:
+                # Estrarre i valori degli iperparametri per questo trial
+                hyperparameters_values = [trial.params.get(name, None) for name in param_names]
+                hyperparameters_values_list.append(hyperparameters_values)
+
+    return hyperparameters_values_list, param_names
+
+def load_optuna_study(model_name,MODEL_FOLDER):        
+    with open(os.path.join(MODEL_FOLDER, model_name), 'rb') as f:
+        study = pickle.load(f)
+    return study
+
+def save_optuna_study(study, model_name, MODEL_FOLDER):
+    with open(os.path.join(MODEL_FOLDER, model_name), 'wb') as f:
+        pickle.dump(study, f)
+        
+        
+
+
 

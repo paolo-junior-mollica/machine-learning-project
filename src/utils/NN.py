@@ -43,7 +43,7 @@ class NeuralNetwork(BaseEstimator, RegressorMixin):
         self.output_dimension = output_dimension
         self.architecture = architecture
         self.activation = activation
-        self.loss = loss if loss == 'mean_squared_error' else self.mean_euclidean_error
+        self.loss = loss 
         self.dropout_input_rate = dropout_input_rate
         self.dropout_hidden_rate = dropout_hidden_rate
         self.learning_rate = learning_rate
@@ -62,6 +62,7 @@ class NeuralNetwork(BaseEstimator, RegressorMixin):
     def mean_euclidean_error(y_true, y_pred):
         # Has to work with tensors
         return kb.mean(kb.sqrt(kb.sum(kb.square(y_true - y_pred), axis=-1)))
+    
 
     def build_model(self):
         model = Sequential()
