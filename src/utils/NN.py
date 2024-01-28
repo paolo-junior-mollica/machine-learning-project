@@ -13,6 +13,7 @@ from keras.src.regularizers import l2
 from sklearn.base import BaseEstimator, RegressorMixin, ClassifierMixin
 from sklearn.metrics import accuracy_score
 from tqdm.keras import TqdmCallback
+import tensorflow as tf
 
 '''
 We utilize the ReLU activation function for the hidden layers and a linear activation for the output layer. 
@@ -35,7 +36,7 @@ class NeuralNetwork(BaseEstimator, RegressorMixin):
     def __init__(self, input_dimension=10, output_dimension=3, architecture=(64, 64), activation='relu',
                  loss='mean_squared_error', dropout_input_rate=.2, dropout_hidden_rate=(.2, .2), learning_rate=.1,
                  momentum=0, weight_decay=1e-3, use_nesterov=False, epochs=100, batch_size=32, patience=10,
-                 verbose=1, validation_data = None, early = True, progress_bar = True):
+                 verbose=1, validation_data=None, early=True, progress_bar=True):
 
         self.history = None
         self.built_model = None
@@ -43,7 +44,7 @@ class NeuralNetwork(BaseEstimator, RegressorMixin):
         self.output_dimension = output_dimension
         self.architecture = architecture
         self.activation = activation
-        self.loss = loss 
+        self.loss = loss
         self.dropout_input_rate = dropout_input_rate
         self.dropout_hidden_rate = dropout_hidden_rate
         self.learning_rate = learning_rate
@@ -59,10 +60,9 @@ class NeuralNetwork(BaseEstimator, RegressorMixin):
         self.progress_bar = progress_bar
 
     @staticmethod
+    @tf.keras.utils.register_keras_serializable()
     def mean_euclidean_error(y_true, y_pred):
-        # Has to work with tensors
         return kb.mean(kb.sqrt(kb.sum(kb.square(y_true - y_pred), axis=-1)))
-    
 
     def build_model(self):
         model = Sequential()
