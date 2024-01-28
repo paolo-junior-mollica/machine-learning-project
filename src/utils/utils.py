@@ -90,19 +90,18 @@ def calculate_ensemble_prediction(y_test,X_test, model_folder, n_models=5, metri
     
 def get_hyperparameter_values_from_dataframe(df):
     hyperparameters_values_list = []
+    param_names = [col for col in df.columns if col.startswith('params_')]
 
-    # Assicurati che ci siano iperparametri da estrarre
-    if len(df) > 0:
-        # Ottieni i nomi degli iperparametri dal dataframe
-        param_names = list(df.columns)
+    # Filtra per righe con stato 'COMPLETE'
+    df_complete = df[df['state'] == 'COMPLETE']
 
-        # Itera attraverso tutte le righe del dataframe
-        for _, row in df.iterrows():
-            # Estrarre i valori degli iperparametri per questa riga
-            hyperparameters_values = [row[name] for name in param_names]
-            hyperparameters_values_list.append(hyperparameters_values)
+    # Itera attraverso le righe filtrate per raccogliere i valori degli iperparametri
+    for _, row in df_complete.iterrows():
+        hyperparameters_values = [row[param] for param in param_names]
+        hyperparameters_values_list.append(hyperparameters_values)
 
     return hyperparameters_values_list, param_names
+
 
 def load_optuna_study(model_name,MODEL_FOLDER):        
     with open(os.path.join(MODEL_FOLDER, model_name), 'rb') as f:
