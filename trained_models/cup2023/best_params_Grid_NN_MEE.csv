@@ -1,2 +1,0 @@
-neuralnetwork__activation,neuralnetwork__architecture,neuralnetwork__batch_size,neuralnetwork__dropout_hidden_rate,neuralnetwork__dropout_input_rate,neuralnetwork__early,neuralnetwork__epochs,neuralnetwork__input_dimension,neuralnetwork__learning_rate,neuralnetwork__momentum,neuralnetwork__output_dimension,neuralnetwork__patience,neuralnetwork__use_nesterov,neuralnetwork__weight_decay
-relu,"(256, 128)",16,"(0.1, 0.1)",0.0,False,150,10,0.01,0.5,3,9,False,0.001

@@ -88,20 +88,19 @@ def calculate_ensemble_prediction(y_test,X_test, model_folder, n_models=5, metri
 
 
     
-def get_hyperparameter_values_from_study(study):
+def get_hyperparameter_values_from_dataframe(df):
     hyperparameters_values_list = []
 
     # Assicurati che ci siano iperparametri da estrarre
-    if len(study.trials) > 0:
-        # Ottieni i nomi degli iperparametri dal primo trial completo
-        param_names = list(study.trials[0].params.keys())
+    if len(df) > 0:
+        # Ottieni i nomi degli iperparametri dal dataframe
+        param_names = list(df.columns)
 
-        # Itera attraverso tutti i trial completati dello study
-        for trial in study.trials:
-            if trial.state == optuna.trial.TrialState.COMPLETE:
-                # Estrarre i valori degli iperparametri per questo trial
-                hyperparameters_values = [trial.params.get(name, None) for name in param_names]
-                hyperparameters_values_list.append(hyperparameters_values)
+        # Itera attraverso tutte le righe del dataframe
+        for _, row in df.iterrows():
+            # Estrarre i valori degli iperparametri per questa riga
+            hyperparameters_values = [row[name] for name in param_names]
+            hyperparameters_values_list.append(hyperparameters_values)
 
     return hyperparameters_values_list, param_names
 
