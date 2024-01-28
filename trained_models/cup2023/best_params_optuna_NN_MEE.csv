@@ -1,2 +1,0 @@
-input_dimension,output_dimension,architecture,activation,dropout_input_rate,dropout_hidden_rate,learning_rate,momentum,weight_decay,use_nesterov,early,patience,epochs,batch_size
-10,3,"[480, 480]",relu,0.02234321551346387,"[0.09142840450599135, 0.26692975670874414]",0.0017965537586283784,0.9505558761150151,0.0010302889266967127,True,True,5,800,40
