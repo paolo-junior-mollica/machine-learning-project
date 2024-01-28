@@ -27,6 +27,7 @@ def mean_euclidean_error(y_true, y_pred):
     y_pred = np.array(y_pred)
     return np.mean(np.linalg.norm(y_true - y_pred, axis=1))
 
+
 def mean_squared_error(y_true, y_pred):
     y_true = np.array(y_true)
     y_pred = np.array(y_pred)
@@ -37,6 +38,7 @@ def root_mean_squared_error(y_true, y_pred):
     y_true = np.array(y_true)
     y_pred = np.array(y_pred)
     return np.sqrt(np.mean((y_true - y_pred) ** 2))
+
 
 def load_random_state():
     # Ricaricare lo stato di Python
@@ -49,8 +51,9 @@ def load_random_state():
         tf_random_state = pickle.load(f)
     tf_random_generator = tf.random.Generator.from_state(*tf_random_state)
     tf.random.set_global_generator(tf_random_generator)
-    
-def save_random_state() : 
+
+
+def save_random_state():
     # Python random state
     python_random_state = random.getstate()
 
@@ -66,13 +69,14 @@ def save_random_state() :
     with open('tf_random_state.pkl', 'wb') as f:
         pickle.dump(tf_random_state, f)
 
-def set_random_state(seed : int):
+
+def set_random_state(seed: int):
     random.seed(seed)
     np.random.seed(seed)
     tf.random.set_seed(seed)
-    
-def calculate_ensemble_prediction(y_test,X_test, model_folder, n_models=5, metric='MEE'):
-    
+
+
+def calculate_ensemble_prediction(y_test, X_test, model_folder, n_models=5, metric='MEE'):
     final_model_ = []
     for i in range(n_models):
         model_path = os.path.join(model_folder, f'NN_model_grid_NN_{metric}_model{i}.joblib')
@@ -87,7 +91,6 @@ def calculate_ensemble_prediction(y_test,X_test, model_folder, n_models=5, metri
     return y_pred_ensemble_final
 
 
-    
 def get_hyperparameter_values_from_dataframe(df):
     hyperparameters_values_list = []
     param_names = [col for col in df.columns if col.startswith('params_')]
@@ -103,16 +106,12 @@ def get_hyperparameter_values_from_dataframe(df):
     return hyperparameters_values_list, param_names
 
 
-def load_optuna_study(model_name,MODEL_FOLDER):        
+def load_optuna_study(model_name, MODEL_FOLDER):
     with open(os.path.join(MODEL_FOLDER, model_name), 'rb') as f:
         study = pickle.load(f)
     return study
 
+
 def save_optuna_study(study, model_name, MODEL_FOLDER):
     with open(os.path.join(MODEL_FOLDER, model_name), 'wb') as f:
         pickle.dump(study, f)
-        
-        
-
-
-
