@@ -1,0 +1,6 @@
+The chosen model is an ensemble of 5 Pipeline(RobustScaler, SVR), where RobustScaler is a data scaler and Pipeline joins together data transformers and predictors.
+The model is created with Scikit-Learn, through the following criteria. 20% of the whole ML-CUP23-TS data is held out as internal test set. On the remaining part of the data
+the grid search is performed to get the best hyperparameters (the range is in the slide and the code), using a 5-fold CV performed by Scikit-Learn's GridSearchCV. The best 
+model is retrained on the TR set in a 5-fold splitting schema on increasing sizes of the training data, to create the learning curve with mean and stdev. 5 copies of the best 
+model are created, each trained on (the complement of) a portion (fold) of the previous split. TS error is assessed by taking the average prediction of the ensemble's members.
+The ensemble is then re-trained on the whole dataset by using the same schema (5-fold splitting with same random seed, each sub-model is trained on part of the data).
