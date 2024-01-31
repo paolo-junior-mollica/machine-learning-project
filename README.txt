@@ -3,8 +3,11 @@ Academic project for the Machine Learning course, a.y. 2023/2024, by Nunzio Cand
 
 ## Link to the repository
 The GitHub repo for this project has much more material than the package provided for delivery. Here is the link: https://github.com/paolo-junior-mollica/machine-learning-project
-In the repo are also contained the joblib file of all the models trained for the project. (They are omitted in the zip file for size reason)
-the BASEPATH contained in some notebook, is the path of the repo of the project, needs to be changed to start the run on other systems.
+The BASEPATH variable contained in some notebook, is the path of the repo of the project, needs to be changed to start the run on other systems.
+## Comparisons notebook
+During our experiments, we save the produced models in a .joblib file. The saved models are not included in the delivered package due to space constraint. 
+In order to execute the cells in the comparisons notebook, these file must be included in the path ../trained_models/cup2023 
+The models can be found in the GitHub repo (link below), at the same path specified above.
 
 ## Link to library sources
 For the project, many software libraries have been used, among which:
